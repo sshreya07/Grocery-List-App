@@ -1,40 +1,29 @@
-import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { Button, FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import ListInputSection from './components/ListInputSection';
+import ItemList from './components/ItemList';
 
 export default function App() {
 
-  const [textInput, setTextInput] = useState('');
   const [itemList, setItemList] = useState([]);
 
-  const getItem = (text) => {
-    setTextInput(text);
-  }
-
-  const handlePress = () => {
+  const handlePress = (textInput) => {
     setItemList(currentItemList => 
       [...currentItemList,
       {text: textInput, id: Math.random().toString()}]
     )
   }
 
+  const onDeleteHandler = (id) => {
+    setItemList(currentItemList => {
+      return currentItemList.filter(item => item.id !== id);
+    })
+  }
+
   return (
     <View style={styles.container}>
-      <View style={styles.inputContainer}>
-        <TextInput placeholder='Add an Item' style={styles.textInput} onChangeText={getItem}/>
-        <Button title='ADD ITEM' onPress={handlePress}/>
-      </View>
-      <View style={styles.listContainer}>
-        <FlatList data={itemList} renderItem={itemData => {
-          return (
-            <View style={styles.listItems}>
-              <Text style={styles.listItem}>{itemData.item.text}</Text>
-            </View>
-          )
-        }}
-        keyExtractor={(item,index)=> {return item.id}}>
-        </FlatList>
-      </View>
+      <ListInputSection onAddItem={handlePress}/>
+      <ItemList value={itemList} onDeleteItem={onDeleteHandler}/>
     </View>
   );
 }
@@ -45,36 +34,4 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     paddingHorizontal:16
   },
-  inputContainer: {
-    flex:1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    marginBottom: 20,
-    borderBottomColor: '#ccc',
-    borderBottomWidth: 2
-    
-  },
-  textInput:{
-    width:'70%',
-    paddingLeft: 10,
-    padding: 6,
-    borderWidth: 1,
-    borderColor: '#ccc'
-  },
-  listContainer: {
-    flex: 5,
-    paddingTop: 16
-  },
-  listItems:{
-    backgroundColor: 'indigo',
-    borderRadius: 10,
-    padding:10,
-    marginVertical:6
-  },
-  listItem:{
-    color:'white',
-    fontSize:18
-  }
 });
