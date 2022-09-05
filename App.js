@@ -1,15 +1,39 @@
 import { StatusBar } from 'expo-status-bar';
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useState } from 'react';
+import { Button, FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
 
 export default function App() {
+
+  const [textInput, setTextInput] = useState('');
+  const [itemList, setItemList] = useState([]);
+
+  const getItem = (text) => {
+    setTextInput(text);
+  }
+
+  const handlePress = () => {
+    setItemList(currentItemList => 
+      [...currentItemList,
+      {text: textInput, id: Math.random().toString()}]
+    )
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
-        <TextInput placeholder='Add an Item' style={styles.textInput} />
-        <Button title='ADD ITEM' />
+        <TextInput placeholder='Add an Item' style={styles.textInput} onChangeText={getItem}/>
+        <Button title='ADD ITEM' onPress={handlePress}/>
       </View>
       <View style={styles.listContainer}>
-        <Text>List of Items...</Text>
+        <FlatList data={itemList} renderItem={itemData => {
+          return (
+            <View style={styles.listItems}>
+              <Text style={styles.listItem}>{itemData.item.text}</Text>
+            </View>
+          )
+        }}
+        keyExtractor={(item,index)=> {return item.id}}>
+        </FlatList>
       </View>
     </View>
   );
@@ -42,5 +66,15 @@ const styles = StyleSheet.create({
   listContainer: {
     flex: 5,
     paddingTop: 16
+  },
+  listItems:{
+    backgroundColor: 'indigo',
+    borderRadius: 10,
+    padding:10,
+    marginVertical:6
+  },
+  listItem:{
+    color:'white',
+    fontSize:18
   }
 });
