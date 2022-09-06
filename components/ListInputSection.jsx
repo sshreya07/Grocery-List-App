@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, StyleSheet, TextInput, View } from 'react-native';
+import { Button, StyleSheet, TextInput, View, Modal, Image } from 'react-native';
 
 const ListInputSection = (props) => {
 
@@ -15,10 +15,20 @@ const ListInputSection = (props) => {
   }
 
   return (
+    <Modal visible={props.visible} animationType='slide'>
       <View style={styles.inputContainer}>
+        <Image source={require('../assets/images/empty-cart.webp')}></Image>
             <TextInput placeholder='Add an Item' style={styles.textInput} onChangeText={getItem} value={textInput}/>
-            <Button title='ADD ITEM' onPress={handlePress}/>
+          <View style={styles.buttonContainer}>
+            <View style={styles.buttons}>
+              <Button title='Cancel' onPress={props.showModal} color="#f31245"/>
+            </View>
+            <View style={styles.buttons}>
+              <Button title='ADD ITEM' onPress={handlePress} color="#204567"/>
+            </View>
+          </View>
         </View>
+      </Modal>
   )
 }
 
@@ -27,20 +37,26 @@ export default ListInputSection
 const styles = StyleSheet.create({
     inputContainer: {
         flex:1,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
-        marginBottom: 20,
-        borderBottomColor: '#ccc',
-        borderBottomWidth: 2
-        
+        backgroundColor: '#311b60'
       },
       textInput:{
-        width:'70%',
-        paddingLeft: 10,
-        padding: 6,
+        width:'80%',
+        padding: 16,
         borderWidth: 1,
-        borderColor: '#ccc'
+        borderColor: '#e4d0ff',
+        backgroundColor: '#e4d0ff',
+        margin: 16,
+        color:'#120438',
+        borderRadius: 6
       },
+      buttonContainer: {
+        flexDirection: 'row'
+      },
+      buttons:{
+        marginHorizontal: 16,
+        width: '30%'
+      }
 })

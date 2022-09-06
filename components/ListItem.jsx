@@ -4,11 +4,11 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 const ListItem = (props) => {
 
   return (
-    <Pressable onPress={props.onDelete.bind(this, props.id)}>
-        <View style={styles.listItems}>
+    <View style={styles.listItems}>
+        <Pressable android_ripple={{color: '#001224'}} onPress={props.onDelete.bind(this, props.id)} style={({pressed}) => pressed && styles.pressedItem}>
             <Text style={styles.listItem}>{props.value}</Text>
-        </View>
-    </Pressable>
+        </Pressable>
+    </View>
   
   )
 }
@@ -19,11 +19,14 @@ const styles = StyleSheet.create({
   listItems:{
     backgroundColor: 'indigo',
     borderRadius: 10,
-    padding:10,
     marginVertical:6
   },
   listItem:{
     color:'white',
-    fontSize:18
+    fontSize:18,
+    padding:10,
+  },
+  pressedItem: {
+    opacity: 0.5
   }
 })
